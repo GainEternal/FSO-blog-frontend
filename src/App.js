@@ -64,7 +64,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setDisplayMessage({ type: 'error', message: 'Wrong credentials' })
+      setDisplayMessage({
+        type: 'error',
+        message: 'Invalid Username or Password',
+      })
       setTimeout(() => {
         setDisplayMessage(null)
       }, 5000)
@@ -82,6 +85,13 @@ const App = () => {
       })
 
       setBlogs(blogs.concat(returnedBlog))
+      setDisplayMessage({
+        type: 'success',
+        message: `A new blog,  "${returnedBlog.title}" by ${returnedBlog.author}, has been added`,
+      })
+      setTimeout(() => {
+        setDisplayMessage(null)
+      }, 5000)
 
       setNewBlog({
         title: '',
