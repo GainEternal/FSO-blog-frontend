@@ -1,0 +1,26 @@
+li {
+  color: #591406;
+}
+
+body {
+  color: #591406;
+  background: #f2d7d5;
+}
+
+.notification {
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.confirm {
+  color: green;
+  background: lightgray;
+}
+
+.error {
+  color: red;
+  background: lightgray;
+}
