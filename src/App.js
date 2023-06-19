@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Notification from './components/Notification'
 import Login from './components/Login'
 import NewBlogForm from './components/NewBlogForm.js'
 import Bloglist from './components/Bloglist.js'
 import loginService from './services/login'
 import blogService from './services/blogs'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -30,6 +31,8 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const blogFormRef = useRef()
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value)
@@ -98,6 +101,7 @@ const App = () => {
         author: '',
         url: '',
       })
+      blogFormRef.current.toggleVisibility()
     } catch (exception) {
       setDisplayMessage({ type: 'error', message: 'Invalid Blog' })
       setTimeout(() => {
@@ -133,12 +137,13 @@ const App = () => {
             {user.name} is logged in{' '}
             <button onClick={handleLogout}>Logout</button>
           </p>
-
-          <NewBlogForm
-            newBlog={newBlog}
-            handleNewBlog={handleNewBlogChange}
-            handleCreateBlog={handleCreateBlog}
-          ></NewBlogForm>
+          <Togglable buttonLabel="new blog" ref={blogFormRef}>
+            <NewBlogForm
+              newBlog={newBlog}
+              handleNewBlog={handleNewBlogChange}
+              handleCreateBlog={handleCreateBlog}
+            ></NewBlogForm>
+          </Togglable>
           <p></p>
           <Bloglist blogs={blogs} />
         </>
