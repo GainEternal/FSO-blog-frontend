@@ -9,11 +9,6 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState({
-    title: '',
-    author: '',
-    url: '',
-  })
   const [displayMessage, setDisplayMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -42,16 +37,6 @@ const App = () => {
     setPassword(event.target.value)
   }
 
-  const handleNewBlogChange = (event) => {
-    if (event.target.name === 'title') {
-      setNewBlog({ ...newBlog, title: event.target.value })
-    } else if (event.target.name === 'author') {
-      setNewBlog({ ...newBlog, author: event.target.value })
-    } else if (event.target.name === 'url') {
-      setNewBlog({ ...newBlog, url: event.target.value })
-    }
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -77,15 +62,9 @@ const App = () => {
     }
   }
 
-  const handleCreateBlog = async (event) => {
-    event.preventDefault()
-
+  const createBlog = async (blogObject) => {
     try {
-      const returnedBlog = await blogService.create({
-        title: newBlog.title,
-        author: newBlog.author,
-        url: newBlog.url,
-      })
+      const returnedBlog = await blogService.create(blogObject)
 
       setBlogs(blogs.concat(returnedBlog))
       setDisplayMessage({
@@ -95,12 +74,6 @@ const App = () => {
       setTimeout(() => {
         setDisplayMessage(null)
       }, 5000)
-
-      setNewBlog({
-        title: '',
-        author: '',
-        url: '',
-      })
       blogFormRef.current.toggleVisibility()
     } catch (exception) {
       setDisplayMessage({ type: 'error', message: 'Invalid Blog' })
@@ -138,11 +111,7 @@ const App = () => {
             <button onClick={handleLogout}>Logout</button>
           </p>
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
-            <NewBlogForm
-              newBlog={newBlog}
-              handleNewBlog={handleNewBlogChange}
-              handleCreateBlog={handleCreateBlog}
-            ></NewBlogForm>
+            <NewBlogForm createBlog={createBlog} />
           </Togglable>
           <p></p>
           <Bloglist blogs={blogs} />
