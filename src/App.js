@@ -89,12 +89,22 @@ const App = () => {
       likes: blog.likes + 1,
     })
     setBlogs(
-      blogs.map((blog, i) => {
+      blogs.map((blog) => {
         return blog.id === returnedBlog.id
           ? { ...blog, likes: returnedBlog.likes }
           : blog
       }),
     )
+  }
+
+  const handleRemove = async (blogToRemove) => {
+    const confirmString =
+      'Remove blog "' + blogToRemove.title + '" by ' + blogToRemove.author + '?'
+    if (window.confirm(confirmString)) {
+      const response = await blogService.remove(blogToRemove)
+      console.log(response)
+      setBlogs(blogs.filter((blog) => blog.id !== blogToRemove.id))
+    }
   }
 
   const handleLogout = async (event) => {
@@ -128,7 +138,12 @@ const App = () => {
             <NewBlogForm createBlog={createBlog} />
           </Togglable>
           <p></p>
-          <Bloglist blogs={blogs} addLike={addLike} />
+          <Bloglist
+            blogs={blogs}
+            user={user}
+            addLike={addLike}
+            handleRemove={handleRemove}
+          />
         </>
       )}
     </div>
