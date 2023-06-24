@@ -83,6 +83,20 @@ const App = () => {
     }
   }
 
+  const addLike = async (blog) => {
+    const returnedBlog = await blogService.addLike({
+      ...blog,
+      likes: blog.likes + 1,
+    })
+    setBlogs(
+      blogs.map((blog, i) => {
+        return blog.id === returnedBlog.id
+          ? { ...blog, likes: returnedBlog.likes }
+          : blog
+      }),
+    )
+  }
+
   const handleLogout = async (event) => {
     event.preventDefault()
 
@@ -114,7 +128,7 @@ const App = () => {
             <NewBlogForm createBlog={createBlog} />
           </Togglable>
           <p></p>
-          <Bloglist blogs={blogs} />
+          <Bloglist blogs={blogs} addLike={addLike} />
         </>
       )}
     </div>
